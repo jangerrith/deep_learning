@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-
 # This needs to be used prevent kernel crash for Mac OS
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -122,7 +121,7 @@ for model_counter in range(1, 6):
         history = model.fit(
             x_train_CV,
             to_categorical(y_train_CV),
-            epochs=50,
+            epochs=2,
             batch_size=100,
             verbose=0
         )
