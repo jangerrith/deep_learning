@@ -37,76 +37,95 @@ input_shape_ = (img_rows, img_cols, 1)
 seed_ = 6570518
 
 # Specify folds for cross-Validation
-N_folds = 5
-
-# Initialise k-fold cross-validation with N_folds folds, shuffling and our seed
-kfold = KFold(n_splits=N_folds, shuffle=True, random_state=seed_)
-# kfold = StratifiedKFold(n_splits=N_folds, shuffle=True, random_state=seed_)
+# N_folds = 5
+#
+# # Initialise k-fold cross-validation with N_folds folds, shuffling and our seed
+# kfold = KFold(n_splits=N_folds, shuffle=True, random_state=seed_)
+# # kfold = StratifiedKFold(n_splits=N_folds, shuffle=True, random_state=seed_)
 
 t0 = time.time()
 
 # Initialise vector to evaluate avg validation losses
-val_losses = 10
+# val_losses = 10
 
 # Start cross-validation
-for train_idx, val_idx in kfold.split(x_train):
+# for train_idx, val_idx in kfold.split(x_train):
 
-    # Build the model and its layers;
-    # note that input/ output dimensions (apart from the input layer)
-    # are inferred automatically
+# Build the model and its layers;
+# note that input/ output dimensions (apart from the input layer)
+# are inferred automatically
 
-    # Assign training and validation data
-    x_train_CV, y_train_CV, = x_train[train_idx], y_train[train_idx]
-    x_val_CV, y_val_CV, = x_train[val_idx], y_train[val_idx]
+# Assign training and validation data
+# x_train_CV, y_train_CV, = x_train[train_idx], y_train[train_idx]
+# x_val_CV, y_val_CV, = x_train[val_idx], y_train[val_idx]
 
-    # Initialise model
-    model = Sequential([
-        Conv2D(16, kernel_size=(5, 5), strides=(1, 1), padding='same',
-               activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
-                   seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
-        MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
-        Conv2D(32, kernel_size=(3, 3), strides=(1, 1), padding='same',
-               activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
-            seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
-        MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
-        Flatten(),  # flatten image to proceed with fully connected layer
-        Dense(64, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
-            seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
-        Dense(32, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
-            seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
-        Dense(16, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
-            seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
-        Dense(10, activation='softmax'),
-    ])
+# Initialise model
+# model = Sequential([
+#     Conv2D(16, kernel_size=(5, 5), strides=(1, 1), padding='same',
+#            activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
+#                seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
+#     MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
+#     Conv2D(32, kernel_size=(3, 3), strides=(1, 1), padding='same',
+#            activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
+#         seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
+#     MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
+#     Flatten(),  # flatten image to proceed with fully connected layer
+#     Dense(64, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
+#         seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
+#     Dense(32, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
+#         seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
+#     Dense(16, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
+#         seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
+#     Dense(10, activation='softmax'),
+# ])
 
-    model.summary()
+model = Sequential([
+    Conv2D(32, kernel_size=(4, 4), strides=(2, 2), padding='same',
+           activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
+        seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
+    Conv2D(16, kernel_size=(4, 4), strides=(1, 1), padding='same',
+           activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
+        seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
+    Conv2D(9, kernel_size=(2, 2), strides=(1, 1), padding='same',
+           activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
+        seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
+    MaxPooling2D(pool_size=(2, 2), strides=(2, 2), padding='valid'),
+    Flatten(),  # flatten image to proceed with fully connected layer
+    Dense(128, activation='sigmoid', kernel_initializer=keras.initializers.TruncatedNormal(
+        seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_)),
+    Dense(10, activation='softmax'),
+])
 
-    # Compile the model
-    # Note that categorical_crossentropy is the cross entropy function optimised for one-hot vectors that are used here
-    model.compile(loss='categorical_crossentropy',
-                  optimizer=keras.optimizers.SGD(learning_rate=0.05),
-                  metrics=['accuracy'])
+model.summary()
 
-    # Train the model.
-    # Note that to_categorical automatically transforms the labels into one-hot vectors
-    model.fit(x_train_CV,
-              to_categorical(y_train_CV),
-              batch_size=100,
-              epochs=50,
-              verbose=0)
+# Compile the model
+# Note that categorical_crossentropy is the cross entropy function optimised for one-hot vectors that are used here
+model.compile(loss='categorical_crossentropy',
+              optimizer=keras.optimizers.SGD(learning_rate=0.05),
+              metrics=['accuracy'])
 
-    # Evaluate current model on validation data
-    loss_val = model.evaluate(
-        x_val_CV,
-        to_categorical(y_val_CV),
-        verbose=0
-    )
+# Train the model.
+# Note that to_categorical automatically transforms the labels into one-hot vectors
+model.fit(x_train,
+          to_categorical(y_train),
+          batch_size=100,
+          epochs=50,
+          verbose=0)
 
-    # Compute different validation losses, one per split
-    val_loss = loss_val[0]
+# Evaluate current model on validation data
+# loss_val = model.evaluate(
+#     x_val_CV,
+#     to_categorical(y_val_CV),
+#     verbose=0
+# )
 
-    # exit cross-validation early
-    break
+# Compute different validation losses, one per split
+# val_loss = loss_val[0]
+
+# exit cross-validation early
+# break
 
 # Calculate time in minutes the training took
 t1 = time.time() - t0
@@ -119,6 +138,6 @@ final_loss = model.evaluate(
     verbose=0
 )
 
-print('Validation loss on model: ' + str(val_loss))
+# print('Validation loss on model: ' + str(val_loss))
 print('Final test loss on model: ' + str(final_loss[0]))
 print('Final test accuracy  on model: ' + str(final_loss[1]))

@@ -143,11 +143,21 @@ for model_counter in range(1, 4):
 
         # Train the model.
         # Note that to_categorical automatically transforms the labels into one-hot vectors
-        model.fit(x_train_CV,
-                  to_categorical(y_train_CV),
-                  batch_size=100,
-                  epochs=50,
-                  verbose=1)
+        history = model.fit(x_train_CV,
+                            to_categorical(y_train_CV),
+                            batch_size=100,
+                            epochs=50,
+                            verbose=0)
+
+        # Summarize and plot history for loss
+        plt.figure(1)
+        plt.plot(history.history['loss'])
+        plt.title('model loss over epochs')
+        plt.ylabel('loss')
+        plt.xlabel('epoch')
+        plt.legend(["Model 1", "Model 2", "Model 3"], loc='upper right')
+        plt.savefig('./graphics/loss_over_epochs_exercise_2a.png',
+                    bbox_inches='tight')
 
         # Evaluate current model on validation data
         loss_val = model.evaluate(
