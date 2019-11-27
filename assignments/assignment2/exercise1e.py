@@ -59,7 +59,7 @@ for train_idx, val_idx in kfold.split(x_train):
     x_train_CV, y_train_CV, = x_train[train_idx], y_train[train_idx]
     x_val_CV, y_val_CV, = x_train[val_idx], y_train[val_idx]
 
-    # Initialise model
+    # Initialise model with stride length 2 in conv layer and padding
     model = Sequential([
         Conv2D(6, kernel_size=(5, 5), strides=(2, 2), padding='same',
                activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(

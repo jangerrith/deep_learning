@@ -61,7 +61,7 @@ for train_idx, val_idx in kfold.split(x_train):
 
     # Initialise model
     model = Sequential([
-        Conv2D(6, kernel_size=(5, 5), strides=(1, 1), padding='same',
+        Conv2D(filters=6, kernel_size=(5, 5), strides=(1, 1), padding='same',
                activation='relu', kernel_initializer=keras.initializers.TruncatedNormal(
                    seed=seed_), bias_initializer=keras.initializers.TruncatedNormal(seed=seed_),  input_shape=input_shape_),
         MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),

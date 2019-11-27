@@ -39,13 +39,11 @@ seed_ = 6570518
 # Specify folds for cross-Validation
 N_folds = 5
 
-
 # Initialise k-fold cross-validation with N_folds folds, shuffling and our seed
 kfold = KFold(n_splits=N_folds, shuffle=True, random_state=seed_)
 
 best_loss = 100
 best_model = 10
-
 
 # Initialise the models
 model1 = Sequential([
